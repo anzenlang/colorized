@@ -70,9 +70,6 @@ class Colorized (α : Type) where
 
 end
 
-namespace Colorized
-
-
 /-- Constant string representing the beginning of an ANSI escape sequence. -/
 private def const := "\x1b["
 
@@ -92,8 +89,6 @@ public def colorizeString (sec : Section) (col : Color) (str : String) : String 
 @[inline]
 public def stylizeString (sty : Style) (str : String) : String :=
   s!"{const}{repr sty}m{str}{reset}"
-
-end Colorized
 
 public instance : Colorized String where
   colorize := Colorized.colorizeString
