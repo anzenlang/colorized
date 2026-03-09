@@ -1,7 +1,9 @@
+module
+
 import «Colorized»
 open Colorized
 
-def main : IO Unit := do
+public def main : IO Unit := do
   -- | Simple style
   IO.println (Colorized.style Style.Underline "Hello, world!")
 

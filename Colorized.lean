@@ -1,4 +1,8 @@
+module
+
 namespace Colorized
+
+public section
 
 /-! Colorized library for adding color and style to text output. This library provides functionality
 to change the foreground and background colors, as well as to apply various text styles. -/
@@ -64,19 +68,33 @@ class Colorized (α : Type) where
   bgColor := colorize Section.Background
   color := colorize Section.Foreground
 
+end
+
+namespace Colorized
+
+
 /-- Constant string representing the beginning of an ANSI escape sequence. -/
 private def const := "\x1b["
 
 /-- Constant string for resetting text formatting. -/
 private def reset := "\x1b[0m"
 
-instance : Colorized String where
-  colorize sec col str :=
-    let sectionNum :=
-      match sec with
-      | Section.Foreground => "9"
-      | Section.Background => "4"
-    s!"{const}{sectionNum}{repr col}m{str}{reset}"
+/-- Applies a section/color to a string. -/
+@[inline]
+public def colorizeString (sec : Section) (col : Color) (str : String) : String :=
+  let secNum :=
+    match sec with
+    | .Foreground => "9"
+    | .Background => "4"
+  s!"{const}{secNum}{repr col}m{str}{reset}"
 
-  style sty str :=
-    s!"{const}{repr sty}m{str}{reset}"
+/-- Applies a style to a string. -/
+@[inline]
+public def stylizeString (sty : Style) (str : String) : String :=
+  s!"{const}{repr sty}m{str}{reset}"
+
+end Colorized
+
+public instance : Colorized String where
+  colorize := Colorized.colorizeString
+  style := Colorized.stylizeString
